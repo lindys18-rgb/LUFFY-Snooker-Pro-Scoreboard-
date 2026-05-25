@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Professional Snooker Scoreboard Overlay for OBS</title>
+    <!-- Google Fonts Integration for 10 English and 10 Khmer Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bokor&family=Chenla&family=Content&family=Fascinate+Inline&family=Freehand&family=Hanuman&family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Khmer&family=Koulen&family=Moul&family=Nokora&family=Orbitron:wght@400..900&family=Oswald:wght@200..700&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Preahvihear&family=Righteous&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Rubik+Mono+One&family=Siemreap&family=Suwannaphum&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+   <link rel="stylesheet" href="style.css">
+        /* --- CORE CONFIGURATION & THEME ENGINE --- */
+        :root {
+            /* 1. Broadcast Dark (Default) */
+            --bg-main: rgba(20, 24, 30, 0.95);
+            --border-main: #3a4454;
+            --center-bg: #252d3a;
+            --accent-glow: #ffcc00;
+            --score-bg: #0b0d10;
+            --score-text: #ffcc00;
+            --break-bg: #990000;
+            --text-main: #ffffff;
+            --bar-shadow: 0 8px 16px rgba(0,0,0,0.6);
+            --radius: 4px;
+        }
+
+        /* 2. Emerald Table */
+        body.theme-emerald {
+            --bg-main: rgba(10, 45, 25, 0.95);
+            --border-main: #29a005;
+            --center-bg: #14522e;
+            --accent-glow: #ecc94b;
+            --score-bg: #051a0e;
+            --score-text: #ecc94b;
+            --break-bg: #742a2a;
+        }
+        /* 3. Crimson Dark */
+        body.theme-crimson {
+            --bg-main: rgba(40, 10, 15, 0.95);
+            --border-main: #742a2a;
+            --center-bg: #521c22;
+            --accent-glow: #ffffff;
+            --score-bg: #1a0508;
+            --score-text: #e53e3e;
+            --break-bg: #1a202c;
+        }
+        /* 4. Cyberpunk Neon */
+        body.theme-cyberpunk {
+            --bg-main: rgba(15, 10, 25, 0.95);
+            --border-main: #00f0ff;
+            --center-bg: #ff007f;
+            --accent-glow: #00f0ff;
+            --score-bg: #000000;
+            --score-text: #00f0ff;
+            --break-bg: #ff007f;
+        }
+        /* 5. Luxury Gold */
+        body.theme-gold {
+            --bg-main: rgba(25, 22, 15, 0.95);
+            --border-main: #b7791f;
+            --center-bg: #744a10;
+            --accent-glow: #d69e2e;
+            --score-bg: #14110b;
+            --score-text: #ecc94b;
+            --break-bg: #2d3748;
+        }
+        /* 6. Deep Slate */
+        body.theme-slate {
+            --bg-main: rgba(30, 41, 59, 0.95);
+            --border-main: #64748b;
+            --center-bg: #475569;
+            --accent-glow: #38bdf8;
+            --score-bg: #0f172a;
+            --score-text: #38bdf8;
+            --break-bg: #ef4444;
+        }
+        /* 7. Carbon Minimal */
+        body.theme-carbon {
+            --bg-main: rgba(20, 20, 20, 0.98);
+            --border-main: #444444;
+            --center-bg: #2e2e2e;
+            --accent-glow: #ffffff;
+            --score-bg: #000000;
+            --score-text: #ffffff;
+            --break-bg: #333333;
+        }
+        /* 8. Royal Purple */
+        body.theme-purple {
+            --bg-main: rgba(35, 15, 50, 0.95);
+            --border-main: #805ad5;
+            --center-bg: #552483;
+            --accent-glow: #e9d8fd;
+            --score-bg: #170524;
+            --score-text: #b794f4;
+            --break-bg: #9b2c2c;
+        }
+        /* 9. Oceanic Drift */
+        body.theme-ocean {
+            --bg-main: rgba(11, 37, 55, 0.95);
+            --border-main: #3182ce;
+            --center-bg: #2b6cb0;
+            --accent-glow: #63b3ed;
+            --score-bg: #061524;
+            --score-text: #63b3ed;
+            --break-bg: #dd6b20;
+        }
+        /* 10. Sunset Vapor */
+        body.theme-sunset {
+            --bg-main: rgba(44, 24, 45, 0.95);
+            --border-main: #ed64a6;
+            --center-bg: #dd6b20;
+            --accent-glow: #ecc94b;
+            --score-bg: #210d1f;
+            --score-text: #ed64a6;
+            --break-bg: #7b341e;
+        }
+
+        /* === 10 ADDITIONAL BROADCAST THEMES === */
+        /* 11. Ice Blizzard */
+        body.theme-ice {
+            --bg-main: rgba(240, 248, 255, 0.95);
+            --border-main: #90cdf4;
+            --center-bg: #ebf8ff;
+            --accent-glow: #3182ce;
+            --score-bg: #bee3f8;
+            --score-text: #2b6cb0;
+            --break-grow: #2b6cb0;
+            --break-bg: #3182ce;
+            --text-main: #1a202c;
+            --bar-shadow: 0 8px 16px rgba(49, 130, 206, 0.2);
+        }
+        /* 12. Tokyo Magenta */
+        body.theme-tokyo {
+            --bg-main: rgba(26, 22, 37, 0.96);
+            --border-main: #bc13fe;
+            --center-bg: #4a154b;
+            --accent-glow: #00ffcc;
+            --score-bg: #11051c;
+            --score-text: #00ffcc;
+            --break-bg: #bc13fe;
+        }
+        /* 13. Vintage Chalk */
+        body.theme-vintage {
+            --bg-main: rgba(244, 241, 234, 0.98);
+            --border-main: #8c7853;
+            --center-bg: #dfd5c6;
+            --accent-glow: #aa2211;
+            --score-bg: #222222;
+            --score-text: #f4f1ea;
+            --break-bg: #aa2211;
+            --text-main: #2c2519;
+        }
+        /* 14. Matrix Terminal */
+        body.theme-matrix {
+            --bg-main: rgba(0, 5, 0, 0.95);
+            --border-main: #00ff00;
+            --center-bg: #002200;
+            --accent-glow: #00ff00;
+            --score-bg: #001100;
+            --score-text: #33ff33;
+            --break-bg: #004400;
+            --bar-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+        }
+        /* 15. Sahara Quartz */
+        body.theme-sahara {
+            --bg-main: rgba(254, 243, 199, 0.96);
+            --border-main: #d97706;
+            --center-bg: #f59e0b;
+            --accent-glow: #b45309;
+            --score-bg: #78350f;
+            --score-text: #fef3c7;
+            --break-bg: #b45309;
+            --text-main: #451a03;
+        }
+        /* 16. British Racing Green */
+        body.theme-brg {
+            --bg-main: rgba(1, 34, 23, 0.97);
+            --border-main: #d4af37;
+            --center-bg: #0b4f35;
+            --accent-glow: #d4af37;
+            --score-bg: #00140b;
+            --score-text: #d4af37;
+            --break-bg: #800000;
+        }
+        /* 17. Electric Plasma */
+        body.theme-plasma {
+            --bg-main: rgba(10, 0, 40, 0.95);
+            --border-main: #7000ff;
+            --center-bg: #ff00aa;
+            --accent-glow: #00ffff;
+            --score-bg: #200030;
+            --score-text: #00ffff;
+            --break-bg: #ff00aa;
+        }
+        /* 18. Monochromatic High-Contrast */
+        body.theme-mono {
+            --bg-main: #ffffff;
+            --border-main: #000000;
+            --center-bg: #000000;
+            --accent-glow: #000000;
+            --score-bg: #ffffff;
+            --score-text: #000000;
+            --break-bg: #000000;
+            --text-main: #000000;
+            --bar-shadow: 0 0 0 3px #000000;
+        }
+        /* 19. Copper Rust */
+        body.theme-copper {
+            --bg-main: rgba(43, 28, 20, 0.95);
+            --border-main: #c084fc;
+            --center-bg: #dd6b20;
+            --accent-glow: #fbd38d;
+            --score-bg: #23120b;
+            --score-text: #fbd38d;
+            --break-bg: #7b341e;
+        }
+        /* 20. Blueprint Schematic */
+        body.theme-blueprint {
+            --bg-main: rgba(10, 60, 150, 0.95);
+            --border-main: #ffffff;
+            --center-bg: #1e40af;
+            --accent-glow: #ffff00;
+            --score-bg: #172554;
+            --score-text: #ffffff;
+            --break-bg: #b91c1c;
+            --bar-shadow: 0 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- CONTROLLER WINDOW MODES (LIGHT / NIGHT MODE) --- */
+        body.ctrl-normal #controller {
+            background: #f7fafc;
+            border: 1px solid #cbd5e0;
+            color: #2d3748;
+        }
+        body.ctrl-normal .panel-row-bg { background: rgba(0,0,0,0.04); }
+        body.ctrl-normal input[type="text"], body.ctrl-normal select { background: #ffffff; color: #2d3748; border: 1px solid #cbd5e0; }
+        body.ctrl-normal .control-header { color: #4a5568; }
+
+        body.ctrl-night #controller {
+            background: #1a202c;
+            border: 1px solid #4a5568;
+            color: #e2e8f0;
+        }
+        body.ctrl-night .panel-row-bg { background: rgba(255,255,255,0.05); }
+        body.ctrl-night input[type="text"], body.ctrl-night select { background: #2d3748; color: #e2e8f0; border: 1px solid #4a5568; }
+        body.ctrl-night .control-header { color: #a0aec0; }
+
+        /* --- BASE STYLING --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b4f2c; /* Classic Chroma Table Green Background */
+            overflow: hidden;
+            user-select: none;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* --- SCOREBOARD OVERLAY VIEWPORT --- */
+        #scoreboard-container {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 850px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-bar {
+            display: flex;
+            background: var(--bg-main);
+            border: 2px solid var(--border-main);
+            border-radius: var(--radius);
+            box-shadow: var(--bar-shadow);
+            width: 100%;
+            height: 55px;
+            align-items: center;
+            color: var(--text-main);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .player-slot {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            height: 100%;
+            transition: background 0.25s ease;
+        }
+
+        .player-slot.active {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        body.theme-mono .player-slot.active {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .striker-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-glow);
+            border-radius: 50%;
+            margin-right: 10px;
+            opacity: 0;
+            box-shadow: 0 0 8px var(--accent-glow);
+            transition: opacity 0.2s ease;
+        }
+        .player-slot.active .striker-dot { opacity: 1; }
+
+        .player-name {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .frame-score {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--score-text);
+            background: var(--score-bg);
+            padding: 0 15px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            min-width: 55px;
+            justify-content: center;
+        }
+
+        .center-meta {
+            background: var(--center-bg);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+            border-left: 2px solid var(--border-main);
+            border-right: 2px solid var(--border-main);
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .match-title { font-size: 11px; color: #a0aec0; text-transform: uppercase; margin-bottom: 2px; font-weight: bold; letter-spacing: 0.5px;}
+        body.theme-ice .match-title { color: #4a5568; }
+        body.theme-sahara .match-title { color: #78350f; }
+        body.theme-vintage .match-title { color: #504530; }
+        body.theme-mono .match-title { color: #000000; }
+        .match-frames { font-size: 18px; font-weight: bold; }
+
+        .break-banner {
+            background: var(--break-bg);
+            color: white;
+            width: 90%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px 0;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transform: translateY(-100%);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: -1;
+            letter-spacing: 1px;
+        }
+        .break-banner.show { transform: translateY(0); }
+
+        /* --- CONTROL INFRASTRUCTURE UI --- */
+        #controller {
+            position: absolute;
+            top: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 18px;
+            border-radius: 8px;
+            width: 850px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
+        .control-header { font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; width: 100%; margin-bottom: 4px; display: block;}
+        
+        button, select, input {
+            padding: 8px 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            outline: none;
+        }
+        button { background: #4a5568; color: white; cursor: pointer; transition: background 0.15s; }
+        button:hover { background: #718096; }
+        body.ctrl-normal button { background: #cbd5e0; color: #2d3748; }
+        body.ctrl-normal button:hover { background: #a0aec0; }
+        
+        .ball-btn { width: 85px; height: 42px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); font-size: 14px; color: white !important;}
+        .foul-btn { background: #9b2c2c !important; color: white !important; }
+        .foul-btn:hover { background: #c53030 !important; }
+        .sub-btn { background: #2b6cb0 !important; font-size: 11px; padding: 5px 10px; color: white !important; }
+        .sub-btn:hover { background: #4299e1 !important; }
+        
+        body.obs-mode #controller { display: none; }
+    </style>
+</head>
+<body class="theme-default ctrl-night">
+
+    <!-- OVERLAY SCOREBOARD DISPLAY SYSTEM -->
+    <div id="scoreboard-container">
+        <div class="main-bar">
+            <!-- Player 1 Slot -->
+            <div id="slot-p1" class="player-slot active">
+                <div class="striker-dot"></div>
+                <div id="display-p1-name" class="player-name">Player 1</div>
+                <div id="display-p1-score" class="frame-score">0</div>
+            </div>
+
+            <!-- Match Configuration Center -->
+            <div class="center-meta">
+                <div id="display-match-title" class="match-title">Best of 9</div>
+                <div id="display-match-frames" class="match-frames">0 - 0</div>
+            </div>
+
+            <!-- Player 2 Slot -->
+            <div id="slot-p2" class="player-slot">
+                <div id="display-p2-score" class="frame-score">0</div>
+                <div id="display-p2-name" class="player-name" style="text-align: right;">Player 2</div>
+                <div class="striker-dot" style="margin-right: 0; margin-left: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- Dynamic Drop-down Break Banner -->
+        <div id="break-banner" class="break-banner">BREAK: 0</div>
+    </div>
+
+    <!-- CENTRAL CONTROL BOARD PANEL -->
+    <div id="controller">
+        <!-- Configuration Context Framework -->
+        <div class="btn-row">
+            <div class="control-header">Match Management</div>
+            <input type="text" id="p1-input" value="O'Sullivan" style="width:130px;">
+            <input type="text" id="p2-input" value="Selby" style="width:130px;">
+            <button onclick="updateNames()" style="background:#2b6cb0; color:white;">Update Profiles</button>
+            
+            <span style="font-size: 13px; margin-left: 10px; font-weight: bold;">Format:</span>
+            <select id="match-format-select" onchange="updateFormat()">
+                <option value="Best of 1">Best of 1</option>
+                <option value="Best of 3">Best of 3</option>
+                <option value="Best of 5">Best of 5</option>
+                <option value="Best of 7">Best of 7</option>
+                <option value="Best of 9" selected>Best of 9</option>
+                <option value="Best of 11">Best of 11</option>
+                <option value="Best of 17">Best of 17</option>
+                <option value="Best of 19">Best of 19</option>
+                <option value="Custom">Custom Text...</option>
+            </select>
+            <input type="text" id="custom-format-input" value="Final" style="width:80px; display:none;">
+        </div>
+
+        <!-- Dynamic Graphic Configurations (Themes and Fonts Engine) -->
+        <div class="btn-row panel-row-bg" style="padding: 10px; border-radius: 6px;">
+            <div class="control-header">Visual Styles & UI Modes</div>
+            
+            <span>UI Mode:</span>
+            <select id="ui-mode-select" onchange="changeUiMode()">
+                <option value="night" selected>Night Mode (Dark Control)</option>
+                <option value="normal">Normal Mode (Light Control)</option>
+            </select>
+
+            <span style="margin-left: 10px;">Theme Profile:</span>
+            <select id="theme-select" onchange="changeTheme()">
+                <optgroup label="Original Core Set">
+                    <option value="default">1. Broadcast Dark (Default)</option>
+                    <option value="emerald">2. Emerald Table</option>
+                    <option value="crimson">3. Crimson Dark</option>
+                    <option value="cyberpunk">4. Cyberpunk Neon</option>
+                    <option value="gold">5. Luxury Gold</option>
+                    <option value="slate">6. Deep Slate</option>
+                    <option value="carbon">7. Carbon Minimal</option>
+                    <option value="purple">8. Royal Purple</option>
+                    <option value="ocean">9. Oceanic Drift</option>
+                    <option value="sunset">10. Sunset Vapor</option>
+                </optgroup>
+                <optgroup label="Extended Broadcast Themes">
+                    <option value="ice">11. Ice Blizzard</option>
+                    <option value="tokyo">12. Tokyo Magenta</option>
+                    <option value="vintage">13. Vintage Chalk</option>
+                    <option value="matrix">14. Matrix Terminal</option>
+                    <option value="sahara">15. Sahara Quartz</option>
+                    <option value="brg">16. British Racing Green</option>
+                    <option value="plasma">17. Electric Plasma</option>
+                    <option value="mono">18. Monochrome High-Contrast</option>
+                    <option value="copper">19. Copper Rust</option>
+                    <option value="blueprint">20. Blueprint Schematic</option>
+                </optgroup>
+            </select>
+
+            <span style="margin-left: 10px;">EN Font:</span>
+            <select id="en-font-select" onchange="applyFonts()">
+                <option value="Arial" selected>1. Arial Standard</option>
+                <option value="'Oswald'">2. Oswald Bold</option>
+                <option value="'Orbitron'">3. Orbitron Sci-Fi</option>
+                <option value="'Roboto Mono'">4. Roboto Monospace</option>
+                <option value="'Righteous'">5. Righteous Retro</option>
+                <option value="'Syncopate'">6. Syncopate Wide</option>
+                <option value="'Permanent Marker'">7. Permanent Marker</option>
+                <option value="'Playfair Display'">8. Playfair Serif</option>
+                <option value="'Fascinate Inline'">9. Fascinate Inline</option>
+                <option value="'Rubik Mono One'">10. Rubik Block</option>
+            </select>
+
+            <span style="margin-left: 10px;">KH Font:</span>
+            <select id="kh-font-select" onchange="applyFonts()">
+                <option value="Arial">1. Match EN Font Style</option>
+                <option value="'Koulen'">2. Koulen (Bold Headline)</option>
+                <option value="'Hanuman'">3. Hanuman (Classic Serif)</option>
+                <option value="'Moul'">4. Moul (Elegant Script)</option>
+                <option value="'Siemreap'">5. Siemreap (Clean Standard)</option>
+                <option value="'Kantumruy Pro'">6. Kantumruy Pro (Modern)</option>
+                <option value="'Suwannaphum'">7. Suwannaphum (Default)</option>
+                <option value="'Nokora'">8. Nokora (Readable Sans)</option>
+                <option value="'Content'">9. Content (Media Standard)</option>
+                <option value="'Preahvihear'">10. Preahvihear (Display)</option>
+            </select>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid rgba(120,120,120,0.2); margin: 12px 0;">
+
+        <!-- Active Game State Mechanics -->
+        <div class="btn-row">
+            <div class="control-header">Frame Flow Operations</div>
+            <button onclick="toggleStriker()" style="background:#2b6cb0; color:white;">✦ Switch Striker [Space]</button>
+            <button onclick="endBreak()" style="background:#4a5568; color:white;">End Break [Enter]</button>
+            <button onclick="undo()" style="background:#e67e22; color: white;">↶ Undo Action [Ctrl+Z]</button>
+        </div>
+        
+        <!-- Frame Scoring Interface Matrix -->
+        <div class="btn-row">
+            <div class="control-header">Add Ball Score Values (Hotkeys 1-7)</div>
+            <button class="ball-btn" style="background:#e53e3e;" onclick="scoreBall(1)">Red (1)</button>
+            <button class="ball-btn" style="background:#ecc94b; color:black !important; text-shadow:none;" onclick="scoreBall(2)">Yel (2)</button>
+            <button class="ball-btn" style="background:#38a169;" onclick="scoreBall(3)">Grn (3)</button>
+            <button class="ball-btn" style="background:#b7791f;" onclick="scoreBall(4)">Brn (4)</button>
+            <button class="ball-btn" style="background:#3182ce;" onclick="scoreBall(5)">Blu (5)</button>
+            <button class="ball-btn" style="background:#ed64a6;" onclick="scoreBall(6)">Pnk (6)</button>
+            <button class="ball-btn" style="background:#1a202c;" onclick="scoreBall(7)">Blk (7)</button>
+        </div>
+
+        <!-- Foul Infraction Assignment Matrix -->
+        <div class="btn-row">
+            <div class="control-header">Foul Deductions (Gives points to Opponent)</div>
+            <button class="foul-btn, ball-btn" class="foul-btn" onclick="foul(4)">Foul +4</button>
+            <button class="foul-btn, ball-btn" class="foul-btn" onclick="foul(5)">Foul +5</button>
+            <button class="foul-btn, ball-btn" class="foul-btn" onclick="foul(6)">Foul +6</button>
+            <button class="foul-btn, ball-btn" class="foul-btn" onclick="foul(7)">Foul +7</button>
+        </div>
+
+        <!-- Dynamic Adjustment and Recalibration Controls -->
+        <div class="btn-row panel-row-bg" style="padding: 8px; border-radius: 4px;">
+            <div class="control-header">Manual Points Correction Adjustments</div>
+            <button class="sub-btn" onclick="deductPoints(1, 1)">P1 (-1)</button>
+            <button class="sub-btn" onclick="deductPoints(1, 4)">P1 (-4)</button>
+            <button class="sub-btn" onclick="deductPoints(2, 1)">P2 (-1)</button>
+            <button class="sub-btn" onclick="deductPoints(2, 4)">P2 (-4)</button>
+        </div>
+
+        <!-- System Administration Commands -->
+        <div class="btn-row" style="margin-top: 15px; margin-bottom: 0;">
+            <button onclick="endFrame()" style="background:#2f855a; color:white; padding: 10px 20px;">✓ End Current Frame</button>
+            <button onclick="resetMatch()" style="background:#9b2c2c; color:white;">Reset Complete Match</button>
+            <button onclick="toggleControllerView()" style="background:#4a5568; color:white; margin-left:auto;">Hide Control Panel For OBS</button>
+        </div>
+    </div>
+
+    <!-- ENGINE STATE AUTOMATION SCRIPTS -->
+    <script>
+        // Centralized State Architecture Engine
+        let p1Name = "O'Sullivan", p2Name = "Selby";
+        let p1Score = 0, p2Score = 0;
+        let p1Frames = 0, p2Frames = 0;
+        let currentBreak = 0;
+        let activePlayer = 1;
+        let matchFormat = "Best of 9";
+        let historyStack = [];
+
+        // Save application status configurations to state history array
+        function saveState() {
+            if (historyStack.length > 40) historyStack.shift();
+            historyStack.push(JSON.stringify({
+                p1Score, p2Score, p1Frames, p2Frames, currentBreak, activePlayer
+            }));
+        }
+
+        // Revert last stored action pipeline state sequence
+        function undo() {
+            if (historyStack.length === 0) return;
+            let prev = JSON.parse(historyStack.pop());
+            p1Score = prev.p1Score; p2Score = prev.p2Score;
+            p1Frames = prev.p1Frames; p2Frames = prev.p2Frames;
+            currentBreak = prev.currentBreak; activePlayer = prev.activePlayer;
+            updateDisplay();
+        }
+
+        // Render reactive visual view components
+        function updateDisplay() {
+            document.getElementById('display-p1-name').innerText = p1Name;
+            document.getElementById('display-p2-name').innerText = p2Name;
+            document.getElementById('display-p1-score').innerText = p1Score;
+            document.getElementById('display-p2-score').innerText = p2Score;
+            document.getElementById('display-match-frames').innerText = `${p1Frames} - ${p2Frames}`;
+            document.getElementById('display-match-title').innerText = matchFormat;
+
+            if(activePlayer === 1) {
+                document.getElementById('slot-p1').classList.add('active');
+                document.getElementById('slot-p2').classList.remove('active');
+            } else {
+                document.getElementById('slot-p1').classList.remove('active');
+                document.getElementById('slot-p2').classList.add('active');
+            }
+
+            let banner = document.getElementById('break-banner');
+            if(currentBreak > 0) {
+                let striker = activePlayer === 1 ? p1Name : p2Name;
+                banner.innerText = `${striker.toUpperCase()} • BREAK: ${currentBreak}`;
+                banner.classList.add('show');
+            } else {
+                banner.classList.remove('show');
+            }
+        }
+
+        // Increment dynamic player potting tallies
+        function scoreBall(points) {
+            saveState();
+            if(activePlayer === 1) p1Score += points;
+            else p2Score += points;
+            currentBreak += points;
+            updateDisplay();
+        }
+
+        // Transfer foul point metrics directly to the opposing player
+        function foul(points) {
+            saveState();
+            if(activePlayer === 1) p2Score += points;
+            else p1Score += points;
+            currentBreak = 0;
+            updateDisplay();
+        }
+
+        // Decrement individual point metrics for processing data corrections
+        function deductPoints(playerNum, points) {
+            saveState();
+            if (playerNum === 1) p1Score = Math.max(0, p1Score - points);
+            else p2Score = Math.max(0, p2Score - points);
+            updateDisplay();
+        }
+
+        // Alternate individual active cue turns
+        function toggleStriker() {
+            saveState();
+            activePlayer = activePlayer === 1 ? 2 : 1;
+            currentBreak = 0;
+            updateDisplay();
+        }
+
+        // Terminate current sequential run tally baseline parameters
+        function endBreak() {
+            saveState();
+            currentBreak = 0;
+            updateDisplay();
+        }
+
+        // Sync visual string values from manual inputs
+        function updateNames() {
+            p1Name = document.getElementById('p1-input').value || "Player 1";
+            p2Name = document.getElementById('p2-input').value || "Player 2";
+            updateDisplay();
+        }
+
+        // Modify standard match layout structural details
+        function updateFormat() {
+            let selectElem = document.getElementById('match-format-select');
+            let customInput = document.getElementById('custom-format-input');
+            if (selectElem.value === "Custom") {
+                customInput.style.display = "inline-block";
+                matchFormat = customInput.value || "Match";
+                customInput.oninput = function() { matchFormat = this.value || "Match"; updateDisplay(); };
+            } else {
+                customInput.style.display = "none";
+                matchFormat = selectElem.value;
+            }
+            updateDisplay();
+        }
+
+        // Complete current active frame profile metrics
+        function endFrame() {
+            saveState();
+            if (p1Score > p2Score) {
+                p1Frames++;
+            } else if (p2Score > p1Score) {
+                p2Frames++;
+            }
+            p1Score = 0; p2Score = 0; currentBreak = 0;
+            updateDisplay();
+        }
+
+        // Wipe baseline match records
+        function resetMatch() {
+            if(confirm("Reset everything? All current frame data and scores will be cleared.")) {
+                saveState();
+                p1Score = 0; p2Score = 0; p1Frames = 0; p2Frames = 0; currentBreak = 0; activePlayer = 1;
+                updateDisplay();
+                historyStack = [];
+            }
+        }
+
+        // Update selected CSS theme profile variants
+        function changeTheme() {
+            let val = document.getElementById('theme-select').value;
+            // Retain body class list state context structures except for the specific theme class
+            let classes = Array.from(document.body.classList);
+            classes.forEach(c => { if(c.startsWith('theme-')) document.body.classList.remove(c); });
+            
+            if (val !== "default") {
+                document.body.classList.add("theme-" + val);
+            }
+        }
+
+        // Toggle Control Panel Interface Modes (Normal Light / Night Mode)
+        function changeUiMode() {
+            let mode = document.getElementById('ui-mode-select').value;
+            if (mode === 'normal') {
+                document.body.classList.remove('ctrl-night');
+                document.body.classList.add('ctrl-normal');
+            } else {
+                document.body.classList.remove('ctrl-normal');
+                document.body.classList.add('ctrl-night');
+            }
+        }
+
+        // Compile combined typography profile structural stacks
+        function applyFonts() {
+            let enFont = document.getElementById('en-font-select').value;
+            let khFont = document.getElementById('kh-font-select').value;
+            let combinedFontStack = `${khFont}, ${enFont}, sans-serif`;
+            
+            document.getElementById('scoreboard-container').style.fontFamily = combinedFontStack;
+            document.getElementById('display-p1-name').style.fontFamily = combinedFontStack;
+            document.getElementById('display-p2-name').style.fontFamily = combinedFontStack;
+            document.getElementById('display-p1-score').style.fontFamily = enFont;
+            document.getElementById('display-p2-score').style.fontFamily = enFont;
+        }
+
+        // Toggle visibility state for OBS integration
+        function toggleControllerView() {
+            document.body.classList.toggle('obs-mode');
+        }
+
+        /* --- BROADCAST PRODUCTION HOTKEY INTERFACES --- */
+        window.addEventListener('keydown', function(e) {
+            // Bypass processing hotkey bindings when modifying names/text fields
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT') {
+                return;
+            }
+
+            // Universal Hotkey Engine Bindings Mapping Execution
+            switch(e.key) {
+                case '1': scoreBall(1); e.preventDefault(); break; // Red
+                case '2': scoreBall(2); e.preventDefault(); break; // Yellow
+                case '3': scoreBall(3); e.preventDefault(); break; // Green
+                case '4': scoreBall(4); e.preventDefault(); break; // Brown
+                case '5': scoreBall(5); e.preventDefault(); break; // Blue
+                case '6': scoreBall(6); e.preventDefault(); break; // Pink
+                case '7': scoreBall(7); e.preventDefault(); break; // Black
+                case ' ': toggleStriker(); e.preventDefault(); break; // Spacebar to swap turns
+                case 'Enter': endBreak(); e.preventDefault(); break; // Enter to clean break runs
+                case 'z': 
+                case 'Z': 
+                    if (e.ctrlKey) { undo(); e.preventDefault(); } 
+                    break;
+            }
+        });
+
+        // Initialize application component profiles on startup
+        updateNames();
+        updateFormat();
+        applyFonts();
+    <script src="script.js"></script>
+</body>
+</html>
